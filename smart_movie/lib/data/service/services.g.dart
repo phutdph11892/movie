@@ -99,4 +99,49 @@ class _RestClient implements RestClient {
     }
     return requestOptions;
   }
+
+  @override
+  Future<TopRatedList> getTopRated(
+      {String language = lang,
+      int page = 1,
+      String clientId = clientId}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'language': language,
+      r'page': page,
+      r'api_key': clientId
+    };
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<PopularList>(
+            Options(method: 'GET', headers: <String, dynamic>{}, extra: _extra)
+                .compose(_dio.options, '/top_rated',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = TopRatedList.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<UpCommingList> getUpComming(
+      {String language = lang,
+      int page = 1,
+      String clientId = clientId}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'language': language,
+      r'page': page,
+      r'api_key': clientId
+    };
+    final _data = <String, dynamic>{};
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<NowPlaying>(
+            Options(method: 'GET', headers: <String, dynamic>{}, extra: _extra)
+                .compose(_dio.options, '/upcoming',
+                    queryParameters: queryParameters, data: _data)
+                .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = UpCommingList.fromJson(_result.data!);
+    return value;
+  }
+
 }
